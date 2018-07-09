@@ -1,0 +1,20 @@
+# Common
+.vscode
+.idea
+tmp
+.env
+node_modules
+.ide
+*.log
+
+# Built Files
+#dist
+
+# Jest Coverage
+coverage
+
+# Lock file
+src/ETHBlock/blockNo
+
+# Playground
+playground

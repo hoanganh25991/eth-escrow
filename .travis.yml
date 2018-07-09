@@ -1,0 +1,12 @@
+branches:
+  only:
+  - master
+language: node_js
+node_js:
+  - "8.11.3"
+cache: yarn
+before_script:
+  - source .ethrc
+script:
+  - yarn test --ci --detectOpenHandles --silent --coverage
+after_script: yarn coveralls
