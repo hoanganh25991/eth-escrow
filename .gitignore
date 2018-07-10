@@ -18,3 +18,6 @@ src/ETHBlock/blockNo
 
 # Playground
 playground
+
+# ETH config
+.ethrc

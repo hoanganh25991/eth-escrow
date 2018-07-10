@@ -11,8 +11,31 @@
  *     gasPrice: 10000000000,
  *   },
  */
+const HDWalletProvider = require('truffle-hdwallet-provider');
+const { MNEMONIC } = process.env;
 
 module.exports = {
-  // See <http://truffleframework.com/docs/advanced/configuration>
-  // to customize your Truffle configuration!
+  development: {
+    host: 'localhost',
+    port: 8545,
+    network_id: '*'
+  },
+  ropsten: {
+    provider: function() { 
+      if(!MNEMONIC) throw new Error('Please provide \'mnemonic\' to deploy.');
+      return new HDWalletProvider(MNEMONIC, 'https://ropsten.infura.io/ur47Lz3XILJxaexyGLCi'); 
+    },
+    network_id: '1',
+    gas: 4500000,
+    gasPrice: 10000000000,
+  },
+  mainnet: {
+    provider: function() { 
+      if(!MNEMONIC) throw new Error('Please provide \'mnemonic\' to deploy.');
+      return new HDWalletProvider(MNEMONIC, 'https://mainnet.infura.io/ur47Lz3XILJxaexyGLCi'); 
+    },
+    network_id: '1',
+    gas: 4500000,
+    gasPrice: 10000000000,
+  },
 };

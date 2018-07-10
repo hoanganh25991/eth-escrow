@@ -5,10 +5,6 @@
   "engines": {
     "node": ">= 8.11.x"
   },
-  "bin": {
-    "ETHUtils": "dist/commands/index.js"
-  },
-  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/hoanganh25991/eth-escrow"
@@ -22,6 +18,7 @@
     "call": "node -r @babel/register",
     "test": "cross-env NODE_PATH=src jest",
     "test:contracts": "yarn call scripts/test-contracts.js",
+    "deploy": "yarn call scripts/deploy-contracts.js",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
@@ -35,6 +32,7 @@
     "moment": "^2.22.2",
     "redux": "^4.0.0",
     "truffle": "^4.1.13",
+    "truffle-hdwallet-provider": "^0.0.5",
     "web3": "^1.0.0-beta.34"
   },
   "devDependencies": {
