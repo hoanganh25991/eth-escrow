@@ -19,6 +19,7 @@
     "test": "cross-env NODE_PATH=src jest",
     "test:contracts": "yarn call scripts/test-contracts.js",
     "deploy": "yarn call scripts/deploy-contracts.js",
+    "ganache": "ganache-cli -m 'rather alien brisk coconut pigeon slogan glad heavy depend panic become pig'",
     "react:start": "react-scripts start",
     "react:build": "react-scripts build",
     "react:test": "react-scripts test --env=jsdom",
@@ -28,11 +29,13 @@
   "dependencies": {
     "chalk": "^2.4.1",
     "cross-env": "^5.2.0",
-    "truffle": "^4.1.13",
-    "truffle-hdwallet-provider": "^0.0.5",
+    "ganache-cli": "^6.1.6",
+    "lodash.curry": "^4.1.1",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "truffle": "^4.1.13",
+    "truffle-hdwallet-provider": "^0.0.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.47",
@@ -47,6 +50,7 @@
     "coveralls": "^3.0.2",
     "cross-spawn": "^6.0.5",
     "eslint": "^4.18.2",
+    "eslint-plugin-react": "^7.10.0",
     "husky": "^0.13.4",
     "jest": "^23.1.0",
     "lint-staged": "^4.0.0",
@@ -91,7 +95,8 @@
       "jasmine": true
     },
     "extends": [
-      "eslint:recommended"
+      "eslint:recommended",
+      "plugin:react/recommended"
     ],
     "parser": "babel-eslint",
     "rules": {
@@ -128,7 +133,8 @@
       "contract": true,
       "assert": true,
       "before": true,
-      "web3": true
+      "web3": true,
+      "window": true
     }
   },
   "jest": {
