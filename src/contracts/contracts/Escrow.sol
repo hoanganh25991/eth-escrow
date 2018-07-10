@@ -1,66 +1,87 @@
 pragma solidity ^0.4.11;
 contract Escrow {
-    uint balance;
-    address public buyer;
-    address public seller;
-    address private escrow;
-    uint private start;
-    bool buyerOk;
-    bool sellerOk;
-function Escrow(address buyer_address, address seller_address) public {
-        // this is the constructor function that runs ONCE upon initialization
-        buyer = buyer_address;
-        seller = seller_address;
-        escrow = msg.sender;
-        start = now; //now is an alias for block.timestamp, not really "now"
-    }
+  uint TIMEOUT = 1 days;
+  uint LOCK_TIME = 2 hours;
+
+  uint balance;
+  address public sellCoin;
+  address public buyCoin;
+  address public arbiter;
+  
+  address private escrow;
+  uint private created_timestamp;
+  
+  bool acceptedByArbiter;
+
+  bool sellCancel;
+  bool buyCancel;
+
+
     
-    function accept() public {
-        if (msg.sender == buyer){
-            buyerOk = true;
-        } else if (msg.sender == seller){
-            sellerOk = true;
-        }
-        if (buyerOk && sellerOk){
-            payBalance();
-        } else if (buyerOk && !sellerOk && now > start + 30 days) {
-            // Freeze 30 days before release to buyer. The customer has to remember to call this method after freeze period.
-            selfdestruct(buyer);
-        }
+  function Escrow(address _sellCoin, address _buyCoin, address _arbiter) public payable {
+    // this is the constructor function that runs ONCE upon initialization
+    //now is an alias for block.timestamp, not really "now"
+    sellCoin = _sellCoin;
+    buyCoin = _buyCoin;
+    arbiter =_arbiter
+    created_timestamp = now; 
+  }
+  
+  function accept() public {
+    if(msg.sender == arbiter){
+      acceptedByArbiter = true;
     }
-    
-    function payBalance() private {
-        // we are sending ourselves (contract creator) a fee
-        escrow.transfer(this.balance / 100);
-        // send seller the balance
-        if (seller.send(this.balance)) {
-            balance = 0;
-        } else {
-            throw;
-        }
+
+    if(acceptedByArbiter){
+      releaseEscrow();
     }
-    
-    function deposit() public payable {
-        if (msg.sender == buyer) {
-            balance += msg.value;
-        }
+
+    if(now > created_timestamp + TIMEOUT) {
+      // Freeze X days before release to sellCoin.
+      // The sellCoin has to remember to call this method after freeze period.
+      selfdestruct(sellCoin);
     }
-    
-    function cancel() public {
-        if (msg.sender == buyer){
-            buyerOk = false;
-        } else if (msg.sender == seller){
-            sellerOk = false;
-        }
-        // if both buyer and seller would like to cancel, money is returned to buyer 
-        if (!buyerOk && !sellerOk){
-            selfdestruct(buyer);
-        }
+  }
+
+  
+  function releaseEscrow() private {
+    // Pay a fee (1%) for arbiter
+    // send buyCoin the balance
+    arbiter.send(this.balance / 100);
+    if (buyCoin.send(this.balance)) {
+      balance = 0;
+    } else {
+      throw;
     }
-    
-    function kill() public constant {
-        if (msg.sender == escrow) {
-            selfdestruct(buyer);
-        }
+  }
+  
+  function deposit() public payable {
+    if (msg.sender == sellCoin) {
+      balance += msg.value;
     }
+  }
+  
+  function cancel() public {
+    if(now < created_timestamp + LOCK_TIME) {
+      return;
+    }
+
+    if (msg.sender == sellCoin){
+      sellCancel = true;
+    } else if (msg.sender == buyCoin){
+      buyCancel = true;
+    }
+    // if both sellCoin and buyCoin would like to cancel
+    // money is returned to sellCoin 
+    if (sellCancel && buyCancel){
+        selfdestruct(sellCoin);
+    }
+  }
+  
+  function kill() public constant {
+    // Arbiter decide to cancel contract 
+    if (msg.sender == arbiter) {
+        selfdestruct(sellCoin);
+    }
+  }
 }
