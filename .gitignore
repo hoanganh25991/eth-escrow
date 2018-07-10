@@ -9,6 +9,7 @@ node_modules
 
 # Built Files
 dist
+build
 
 # Jest Coverage
 coverage

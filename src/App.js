@@ -139,11 +139,11 @@ class App extends Component {
                 <p>Transferred to buyer</p>
                 <p>{newTab(`${ROPSTEN_URL}/tx/${tranferToBuyerTx}`, `Pending Transaction: ${tranferToBuyerTx}`)}</p>
               </Fragment>}
-              <button
+              {/* <button
                 onClick={this.check(this.state.buyerAddress)}
               >
                 Check Buyer Balance
-              </button>
+              </button> */}
             </div>
           </Fragment>
         )}

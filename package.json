@@ -148,5 +148,6 @@
       "__tests__/.*.mock.js$",
       "(/)?dist/.*.js$"
     ]
-  }
+  },
+  "homepage": "https://example.com/eth-escrow"
 }
