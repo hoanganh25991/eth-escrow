@@ -127,7 +127,9 @@
     "globals": {
       "artifacts": true,
       "contract": true,
-      "assert": true
+      "assert": true,
+      "before": true,
+      "web3": true
     }
   },
   "jest": {

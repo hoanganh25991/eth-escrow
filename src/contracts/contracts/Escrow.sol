@@ -6,14 +6,13 @@ contract Escrow {
   address public arbiter;
   
   constructor(
-    address _sellCoin,
     address _buyCoin,
     address _arbiter
   )
   public
   payable
   {
-    sellCoin = _sellCoin;
+    sellCoin = msg.sender;
     buyCoin = _buyCoin;
     arbiter = _arbiter;
   }
